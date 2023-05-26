@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1 th:text="${vo}">테스트</h1>
+<div th:text='${"<b>"+vo.mid+"</b>"}'></div>
+<div th:utext='${"<b>"+vo.mid+"</b>"}'></div>
+</body>
+</html>

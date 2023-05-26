@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultrag.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/wrap}">
+	
+	<!-- wrap자리는 여기다~ 라고 알려주는 것! -->
+
+<div layout:fragment="content">
+	<table border="1">
+		<tr>
+			<td>MID</td>
+			<td>MNAME</td>
+			<td>REGDATE</td>
+		</tr>
+		<tr th:each="member : ${list}">
+			<td th:text="${member.mid}"></td>
+			<td th:text="${member.mname}"></td>
+			<td th:text="${#dates.format(member.regdate,'yyyy-MM-dd')}"></td>
+		</tr>
+	</table>
+</div>
