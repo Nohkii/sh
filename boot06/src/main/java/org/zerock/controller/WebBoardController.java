@@ -65,6 +65,13 @@ public class WebBoardController {
 		req.setAttribute("vo", board);
 		return "boards/view";
 	}
+	
+	@GetMapping("/modify")
+	public String modify(HttpServletRequest req, PageVO vo) {
+		WebBoard board = repo.findById(Long.parseLong(req.getParameter("bno"))).get();
+		req.setAttribute("vo", board);
+		return "boards/moodify";
+	}
 }
 // PageableDefault 이용해서 하는 방법
 //		@GetMapping("/list")
