@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.project.board.notice.NoticeMapper">
+	<insert id="insert"
+		parameterType="kr.co.project.board.notice.NoticeVO">
+		INSERT INTO board( title, content, viewcount, regdate,
+		filename_org,
+		filename_real, memberno)
+		VALUES(
+		#{title},#{content},0,NOW(),
+		#{filename_org},#{filename_real},#{memberno}
+		)
+	</insert>
+
+	<update id="update"
+		parameterType="kr.co.project.board.notice.NoticeVO">
+		UPDATE board SET
+		title =#{title}
+		,content =#{content}
+		<if test="filename_org!=null and filename_org!=''">
+			,filename_org=#{filename_org},
+			,filename_real=#{filename_real}
+		</if>
+		WHERE no = #{no}
+	</update>
+
+	<delete id="delete"
+		parameterType="kr.co.project.board.notice.NoticeVO">
+		DELETE FROM board WHERE no =#{no}
+	</delete>
+	
+	<!-- 계속 사용할거니까 따로 빼둠~~ -->	
+	<sql id="whereSql">
+		<where>
+			<if test="stype == 'all'">
+			(title LIKE '%${sword}%' OR content LIKE '%${sword}%')
+			</if>
+			<if test="stype != 'all' and stype != null and stype != ''">
+			${stype} LIKE '%${sword}%'
+			</if>
+			<if test="memberno != 0">
+			AND memberno = #{memberno}
+			</if>
+		</where>
+	</sql>
+
+	<select id="count"
+		parameterType="kr.co.project.board.notice.NoticeVO" resultType="int">
+		SELECT COUNT(*) FROM board
+		<include refid ="whereSql"/>
+	</select>
+
+	<select id="list"
+		parameterType="kr.co.project.board.notice.NoticeVO" resultType="kr.co.project.board.notice.NoticeVO">
+		SELECT *,
+			(SELECT name FROM member WHERE no=board.memberno) membername
+		FROM board
+		<include refid ="whereSql"/>
+		ORDER BY regdate DESC
+		LIMIT ${startIdx}, 10
+		<!-- 해당 페이지의 데이터를 가져올 수 있도록,, 10개씩 나눠서 계산 -->
+	</select>
+	
+	<select id="view" parameterType="kr.co.project.board.notice.NoticeVO" resultType="kr.co.project.board.notice.NoticeVO">
+	SELECT * FROM board where no=#{no}
+	</select>
+	
+	<update id="updateViewcount" parameterType="int">
+	UPDATE board SET viewcount = viewcount+1 WHERE no =#{no}
+	</update>
+</mapper>
