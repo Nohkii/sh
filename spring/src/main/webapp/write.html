@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+	$(function() {
+		$("#btn").click(function() {
+			// 기존 파라미터 전송방식으로
+			/* 			$.ajax({
+			 url:'test/api/member/insert3',
+			 method:'post',
+			 data: $("#frm").serialize(),
+			 // 원래는 $("id").val이런식으로 값을 가져와야되는데 너무 많으면 다 적기힘드니까
+			 // serialize를 써서 직렬화 시켜서 받아온다~
+			 success: function(res){
+			 if(res=='success'){
+			 alert('정상적으로 가입되었습니다')
+			 }
+			 }
+			
+			 }) */
+			// request body 방식
+			// json 형태로 변환
+			let param = JSON.stringify){
+			id:$("#id").val();
+			pwd:$("#pwd").val();
+			name:$("#name").val();
+			email:$("#email").val();
+		});
+	//이걸 다 일일히 쓰기 귀찮으니까
+			$.ajax({
+				url : 'test/api/member/insert2',
+				method : 'put',
+				data : param,
+				contentType:'application/json;charset=utf-8',
+				success : function(res) {
+					if (res == 'success') {
+						alert('정상적으로 가입되었습니다')
+					}
+				}
+
+			})
+		})
+	})
+</script>
+</head>
+<body>
+	<form id="frm">
+		아이디 : <input type="text" name="id" id="id"><br> 비밀번호 : <input
+			type="text" name="pwd" id="pwd"><br> 이름 : <input
+			type="text" name="name" id="name"><br> 이메일 : <input
+			type="text" name="email" id="email"><br> <input
+			type="button" value="가입" id="btn">
+	</form>
+</body>
+</html>

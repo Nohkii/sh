@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.test.member.MemberMapper">
+	<resultMap type="kr.co.test.member.MemberVO" id="mvo">
+		 <result column="joindate" property="regdate"/>
+	</resultMap>
+
+	<sql id="whereSql">
+		<where>
+			<if test="searchWord != null and searchWord != ''">
+			AND id LIKE '%${searchWord}%'
+			</if>
+			<if test="sGender != -1">
+			AND gender = #{sGender}
+			</if>
+		</where>
+	</sql>
+	<select id="count" 
+		parameterType="kr.co.test.member.MemberVO"
+		resultType = "Integer">
+		SELECT COUNT(*) FROM t_member
+		<include refid="whereSql"/>
+	</select>
+	<select id="allList" 
+			resultType="kr.co.test.member.MemberVO"
+			parameterType="kr.co.test.member.MemberVO"
+			>
+		SELECT 
+			memberno, id, pwd, name, email, joindate regdate, gender 
+		FROM t_member
+		<include refid="whereSql"/>
+		ORDER BY ${orderColumn} ${order} 
+	</select>
+	<insert id="insert" parameterType="kr.co.test.member.MemberVO">
+		INSERT INTO t_member (
+			memberno, id, pwd, name, email, joindate, gender, filename_org, filename_real
+		) VALUES (
+			MEMBER_SEQ.NEXTVAL, #{id}, #{pwd}, #{name}, #{email}, SYSDATE, #{gender}, #{filename_org}, #{filename_real}
+		)
+		<selectKey keyProperty="memberno" order="AFTER" resultType="int">
+			SELECT MEMBER_SEQ.CURRVAL FROM dual
+		</selectKey>
+	</insert>
+	<insert id="insertHobby" parameterType="kr.co.test.member.HobbyVO">
+		INSERT INTO hobby (memberno, hobby) VALUES (#{memberno}, #{hobby})
+	</insert>
+	<select id="selectOne" parameterType="int" resultType="kr.co.test.member.MemberVO">
+		SELECT * FROM t_member WHERE memberno=#{memberno}
+	</select>
+</mapper>
+
+
+
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+$(function(){
+	$("#btn").click(function(){
+		$.ajax({
+			url:'/test/api/member/list',
+			dataType:'json',
+			cache:false,
+			success:function(res) {
+				console.log(res['totalcount']);
+				var html = "<table border='1'>";
+				html += "<tr>";
+				html += "	<th>아이디</th>";
+				html += "	<th>이름</th>";
+				html += "	<th>이메일</th>";
+				html += "</tr>";
+				$.each(res['items'], (i,e)=>{
+					html += "<tr>";
+					html += "	<td>"+e['id']+"</td>";
+					html += "	<td>"+e['name']+"</td>";
+					html += "	<td>"+e['email']+"</td>";
+					html += "</tr>";
+				});
+				html += "</table>";
+				$("#memberArea").html(html);
+			}
+		})
+	})
+})
+</script>
+</head>
+<body>
+<input type="button" value="회원정보 가져오기" id="btn">
+<div id="memberArea"></div>
+</body>
+</html>
